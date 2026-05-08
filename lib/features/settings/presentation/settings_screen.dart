@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/theme/theme_provider.dart';
+import 'package:inkwell_notes/core/theme/theme_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -10,17 +10,31 @@ class SettingsScreen extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+        title: const Text('Settings', style: TextStyle(fontFamily: 'Lora', fontWeight: FontWeight.bold)),
+      ),
       body: ListView(
         children: [
           ListTile(
-            title: const Text('Dark Mode'),
-            trailing: Switch(
-              value: themeMode == ThemeMode.dark,
-              onChanged: (value) {
-                ref.read(themeModeProvider.notifier).toggleTheme();
+            title: const Text('Theme'),
+            trailing: DropdownButton<ThemeMode>(
+              value: themeMode,
+              onChanged: (ThemeMode? value) {
+                if (value != null) {
+                  ref.read(themeModeProvider.notifier).setThemeMode(value);
+                }
               },
+              items: const [
+                DropdownMenuItem(value: ThemeMode.system, child: Text('System')),
+                DropdownMenuItem(value: ThemeMode.light, child: Text('Light')),
+                DropdownMenuItem(value: ThemeMode.dark, child: Text('Dark')),
+              ],
             ),
+          ),
+          const Divider(),
+          const ListTile(
+            title: Text('Version'),
+            subtitle: Text('0.1.0'),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/notes/presentation/notes_list_screen.dart';
+import '../../features/notes/presentation/screens/note_editor_screen.dart';
 import '../../features/search/presentation/search_screen.dart';
 import '../../features/tags/presentation/tags_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
@@ -20,6 +21,17 @@ final appRouter = GoRouter(
   initialLocation: '/notes',
   navigatorKey: _rootNavigatorKey,
   routes: [
+    GoRoute(
+      path: '/editor',
+      builder: (context, state) => const NoteEditorScreen(),
+    ),
+    GoRoute(
+      path: '/editor/:id',
+      builder: (context, state) {
+        final id = int.tryParse(state.pathParameters['id'] ?? '');
+        return NoteEditorScreen(noteId: id);
+      },
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return ScaffoldWithNavBar(navigationShell: navigationShell);
